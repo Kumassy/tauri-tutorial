@@ -2,6 +2,7 @@ import React from 'react';
 import logo from './logo.svg';
 import './App.css';
 import { invoke } from '@tauri-apps/api/tauri'
+import { open } from '@tauri-apps/api/dialog'
 
 function App() {
   function executeCommands() {
@@ -25,6 +26,10 @@ function App() {
       console.log('async_command', message)
     })
   }
+
+  function openDialog () {
+    open().then(files => console.log(files))
+  }
   return (
     <div className="App">
       <header className="App-header">
@@ -36,6 +41,7 @@ function App() {
           Hello Tauri
         </p>
         <button onClick={executeCommands}>Click to execute command</button>
+        <button onClick={openDialog}>Click to open dialog</button>
         <a
           className="App-link"
           href="https://reactjs.org"
