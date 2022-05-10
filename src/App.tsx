@@ -1,7 +1,8 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import logo from './logo.svg';
 import './App.css';
 import { invoke } from '@tauri-apps/api/tauri'
+import { emit, listen } from '@tauri-apps/api/event'
 import { open } from '@tauri-apps/api/dialog'
 
 function App() {
@@ -30,6 +31,26 @@ function App() {
   function openDialog () {
     open().then(files => console.log(files))
   }
+
+  function emitMessage() {
+    emit('front-to-back', "hello from front")
+  }
+
+  useEffect(() => {
+    let unlisten: any;
+    async function f() {
+      unlisten = await listen('back-to-front', event => {
+        console.log(`back-to-front ${event.payload} ${new Date()}`)
+      });
+    }
+    f();
+
+    return () => {
+      if (unlisten) {
+        unlisten();
+      }
+    }
+  }, [])
   return (
     <div className="App">
       <header className="App-header">
@@ -42,6 +63,7 @@ function App() {
         </p>
         <button onClick={executeCommands}>Click to execute command</button>
         <button onClick={openDialog}>Click to open dialog</button>
+        <button onClick={emitMessage}>Click to emit message</button>
         <a
           className="App-link"
           href="https://reactjs.org"
