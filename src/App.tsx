@@ -12,6 +12,28 @@ function App() {
     setGreetMsg(await invoke("greet", { name }));
   }
 
+  function executeCommands() {
+    invoke('simple_command')
+    invoke('command_with_message', { message: 'some message' }).then(message => {
+      console.log('command_with_messge', message)
+    })
+    invoke('command_with_object', { message: { field_str: 'some message', field_u32: 12 }}).then(message => {
+      console.log('command_with_object', message)
+    })
+
+    for (let arg of [1, 2]) {
+      invoke('command_with_error', { arg }).then(message => {
+        console.log('command_with_error', message)
+      }).catch(message => {
+        console.error('command_with_error', message)
+      })
+    }
+
+    invoke('async_command', { arg: 14 }).then(message => {
+      console.log('async_command', message)
+    })
+  }
+
   return (
     <div className="container">
       <h1>Welcome to Tauri!</h1>
@@ -48,6 +70,7 @@ function App() {
       <p>{greetMsg}</p>
 
       <div>Hello Tauri</div>
+      <button onClick={executeCommands}>Click to execute command</button>
     </div>
   );
 }
