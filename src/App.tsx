@@ -1,6 +1,7 @@
 import { useState } from "react";
 import reactLogo from "./assets/react.svg";
 import { invoke } from "@tauri-apps/api/tauri";
+import { open } from '@tauri-apps/api/dialog'
 import "./App.css";
 
 function App() {
@@ -32,6 +33,10 @@ function App() {
     invoke('async_command', { arg: 14 }).then(message => {
       console.log('async_command', message)
     })
+  }
+
+  function openDialog () {
+    open().then(files => console.log(files))
   }
 
   return (
@@ -71,6 +76,7 @@ function App() {
 
       <div>Hello Tauri</div>
       <button onClick={executeCommands}>Click to execute command</button>
+      <button onClick={openDialog}>Click to open dialog</button>
     </div>
   );
 }
