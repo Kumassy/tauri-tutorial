@@ -1,6 +1,7 @@
 // Prevents additional console window on Windows in release, DO NOT REMOVE!!
 #![cfg_attr(not(debug_assertions), windows_subsystem = "windows")]
 use serde::{Deserialize, Serialize};
+use tauri::Manager;
 
 #[tauri::command]
 fn simple_command() {
@@ -46,6 +47,23 @@ async fn async_command(arg: u32) -> String {
 }
 fn main() {
     tauri::Builder::default()
+        .setup(|app| {
+            let id = app.listen_global("front-to-back", |event| {
+                println!(
+                    "got front-to-back with payload {:?}",
+                    event.payload().unwrap()
+                )
+            });
+
+            let app_handle = app.app_handle();
+            std::thread::spawn(move || loop {
+                app_handle
+                    .emit_all("back-to-front", "ping frontend".to_string())
+                    .unwrap();
+                std::thread::sleep(std::time::Duration::from_secs(1))
+            });
+            Ok(())
+        })
         .invoke_handler(tauri::generate_handler![
             simple_command,
             command_with_message,
