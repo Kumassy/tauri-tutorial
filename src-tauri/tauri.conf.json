@@ -1,19 +1,28 @@
 {
+  "build": {
+    "beforeDevCommand": "yarn dev",
+    "beforeBuildCommand": "yarn build",
+    "devPath": "http://localhost:1420",
+    "distDir": "../dist",
+    "withGlobalTauri": false
+  },
   "package": {
     "productName": "try-tauri",
-    "version": "0.1.0"
-  },
-  "build": {
-    "distDir": "../build",
-    "devPath": "http://localhost:3000",
-    "beforeDevCommand": "yarn start",
-    "beforeBuildCommand": "yarn build"
+    "version": "0.0.0"
   },
   "tauri": {
+    "allowlist": {
+      "all": false,
+      "shell": {
+        "all": false,
+        "open": true
+      },
+      "dialog": {
+        "open": true
+      }
+    },
     "bundle": {
       "active": true,
-      "targets": "all",
-      "identifier": "com.tauri.dev",
       "icon": [
         "icons/32x32.png",
         "icons/128x128.png",
@@ -21,47 +30,23 @@
         "icons/icon.icns",
         "icons/icon.ico"
       ],
-      "resources": [],
-      "externalBin": [],
-      "copyright": "",
-      "category": "DeveloperTool",
-      "shortDescription": "",
-      "longDescription": "",
-      "deb": {
-        "depends": []
-      },
-      "macOS": {
-        "frameworks": [],
-        "exceptionDomain": "",
-        "signingIdentity": null,
-        "providerShortName": null,
-        "entitlements": null
-      },
-      "windows": {
-        "certificateThumbprint": null,
-        "digestAlgorithm": "sha256",
-        "timestampUrl": ""
-      }
+      "identifier": "com.tauri.dev",
+      "targets": "all"
+    },
+    "security": {
+      "csp": null
     },
     "updater": {
       "active": false
     },
-    "allowlist": {
-      "dialog": {
-        "open": true
-      }
-    },
     "windows": [
       {
-        "title": "Try Tauri",
-        "width": 800,
-        "height": 600,
+        "fullscreen": false,
         "resizable": true,
-        "fullscreen": false
+        "title": "try-tauri",
+        "width": 800,
+        "height": 600
       }
-    ],
-    "security": {
-      "csp": null
-    }
+    ]
   }
 }
